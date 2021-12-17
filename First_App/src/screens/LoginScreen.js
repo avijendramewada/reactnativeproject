@@ -1,11 +1,46 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Image, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {StyleSheet, View, Text, Image, TouchableOpacity,Alert,KeyboardAvoidingView} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
+import auth from '@react-native-firebase/auth';
 
 
 function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+    const userLogin = async () => {
+      if (!email && !password) {
+        Alert.alert('Please enter email and password');
+        return;
+      }
+      if (!email) {
+        Alert.alert('please enter email');
+        return;
+      }
+      if (!password) {
+        Alert.alert('please enter password');
+        return;
+      }
+      await auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          Alert.alert('User Login successfully');
+        })
+        .catch(error => {
+          if (error.code === 'auth/user-not-found') {
+            Alert.alert('please enter valid username');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            Alert.alert('That email address is invalid!');
+          }
+          if (error.code === 'auth/wrong-password') {
+            Alert.alert('Please enter correct password');
+          }
+          return
+        });
+    };
+
 
   return (
     <KeyboardAvoidingView>
@@ -34,7 +69,7 @@ function LoginScreen({navigation}) {
           value={password}
           onChangeText={password => setPassword(password)}
         />
-        <Button mode="contained" onPress={() => console.log('login successfully',email,password)}>
+        <Button mode="contained" onPress={() => userLogin()}>
           Login
         </Button>
         <TouchableOpacity onPress={()=>navigation.navigate("SignUp")}>

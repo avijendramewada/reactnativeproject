@@ -1,6 +1,5 @@
-import { returnStatement } from '@babel/types';
 import React from 'react';
-import {View, Text, FlatList,StyleSheet} from 'react-native';
+import {View, Text, FlatList, StyleSheet} from 'react-native';
 import {Avatar, Button, Card, Title, Paragraph} from 'react-native-paper';
 
 function ItemsScreen(props) {
@@ -33,36 +32,36 @@ function ItemsScreen(props) {
     },
   ];
   const renderItem = item => {
-      return(
-    <Card style={styles.card}>
-      <Card.Title title={item.name} />
-      <Card.Content>
-        <Paragraph>{item.description}</Paragraph>
-        <Paragraph>{item.year}</Paragraph>
-      </Card.Content>
-      <Card.Cover source={{uri: item.img_url}} />
-      <Card.Actions>
-        <Button>{item.price}</Button>
-        <Button>call seller</Button>
-      </Card.Actions>
-    </Card>
-      )
+    return (
+      <Card style={styles.card}>
+        <Card.Title title={item.name} />
+        <Card.Content>
+          <Paragraph>{item.description}</Paragraph>
+          <Paragraph>{item.year}</Paragraph>
+        </Card.Content>
+        <Card.Cover source={{uri: item.img_url}} />
+        <Card.Actions>
+          <Button>{item.price}</Button>
+          <Button>call seller</Button>
+        </Card.Actions>
+      </Card>
+    );
   };
   return (
     <View>
       <FlatList
         data={items}
-        keyExtractor={(item) => item.contact_number}
+        keyExtractor={item => item.contact_number}
         renderItem={({item}) => renderItem(item)}
       />
     </View>
   );
 }
 const styles = StyleSheet.create({
-    card:{
-        margin:10,
-        elevation:3
-    }
-})
+  card: {
+    margin: 10,
+    elevation: 3,
+  },
+});
 
 export default ItemsScreen;

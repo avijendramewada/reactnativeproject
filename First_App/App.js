@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import type {Node} from 'react';
 import {
   Button,
@@ -26,15 +18,15 @@ import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import SignUpScreen from './src/screens/SignUpScreen';
 import CreateAdScreen from './src/screens/CreateAdScreen';
 import ItemsScreen from './src/screens/ItemsScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Feather from 'react-native-vector-icons/Feather';
+import auth from '@react-native-firebase/auth';
 
-// import Header from './components/Header';
-// import TodoItem from './components/TodoItem';
-// import AddTodo from './components/AddTodo';
+
 const theme = {
   ...DefaultTheme,
   roundness: 2,
@@ -70,23 +62,51 @@ const TabNavigator = () => {
 
           if (route.name === 'Home') {
             iconName = 'home';
-          }else if(route.name === 'Create'){
-            iconName = 'plus-square'
+          } else if (route.name === 'Create') {
+            iconName = 'plus-square';
+          } else if (route.name === 'Profile') {
+            iconName = 'user';
           }
 
+
           // You can return any component that you like here!
-          return <Feather name={iconName} size={30} color={color} />;
+          return (
+            <View style={{borderWidth:5,borderColor:'white',borderRadius:30}}>
+              <Feather name={iconName} size={25} color={color} />
+            </View>
+          );
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
       })}>
-      <Tab.Screen name="Home" component={ItemsScreen} />
-      <Tab.Screen name="Create" component={CreateAdScreen} />
+      <Tab.Screen name="Home" component={ItemsScreen} options={{title: ''}} />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{title: ''}}
+      />
+
+      <Tab.Screen
+        name="Create"
+        component={CreateAdScreen}
+        options={{title: ''}}
+      />
     </Tab.Navigator>
   );
 };
 const Navigation = () => {
-  let user = 'vijendra';
+  const[user,setUser]=useState('');
+
+ useEffect(()=>{
+ auth().onAuthStateChanged((userExist) =>{
+   if(userExist){
+     setUser(userExist)
+   }else{
+     setUser('')
+   }
+ })
+ },[])
+
   return (
     <NavigationContainer>
       {user ? <TabNavigator /> : <AuthNavigaror />}
@@ -94,50 +114,12 @@ const Navigation = () => {
   );
 };
 const App = () => {
-  // const [todos, setTodos] = useState([
-  //   {text: 'Coffee', key: '1'},
-  //   {text: 'Tea', key: '2'},
-  //   {text: 'Cold drink', key: '3'},
-  //   {text: 'Pizza', key: '4'},
-  // ]);
-  // const pressHandler = key => {
-  //   setTodos(previousTodos => {
-  //     return previousTodos.filter(todo => todo.key != key);
-  //   });
-  // };
-  // // const addTodo = (item) =>{
-  // //   alert("Thankyou for adding "+item);console.log("hello i am in console")
-  // // }
-  // const addTodo = item => {
-  //   const newItem = {
-  //     text: item,
-  //     key: '7',
-  //   };
-  //   setTodos([newItem, ...todos]);
-  // };
   return (
     <>
       <PaperProvider theme={theme}>
         <StatusBar barStyle="dark-content" backgroundColor="#9ea7aa" />
         <View style={styles.container}>
-          {/* <LoginScreen /> */}
-          {/* <CreateAdScreen/> */}
-          {/* <ItemsScreen /> */}
           <Navigation />
-          {/* <SignUpScreen/> */}
-          {/* <View style={styles.content}> */}
-          {/* <Header />
-        <AddTodo addTodo={addTodo} />
-        <View style={styles.list}> */}
-
-          {/* <FlatList
-            data={todos}
-            renderItem={({item}) => (
-              <TodoItem item={item} pressHandler={pressHandler} />
-            )}
-          /> */}
-          {/* </View>
-      </View> */}
         </View>
       </PaperProvider>
     </>

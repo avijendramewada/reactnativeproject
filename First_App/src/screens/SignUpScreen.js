@@ -1,12 +1,53 @@
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Image, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Alert,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
-
+import auth from '@react-native-firebase/auth';
 
 function SignUpScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const userSignup = async () => {
+    if (!email && !password) {
+      Alert.alert('Please enter email and password');
+      return;
+    }
+    if(!email){
+      Alert.alert('please enter email')
+      return
+    }
+    if (!password) {
+      Alert.alert('please enter password');
+      return;
+    }
+    await auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        Alert.alert('User register successfully');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          Alert.alert('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          Alert.alert('That email address is invalid!');
+        }
+          if (error.code === 'auth/weak-password') {
+          Alert.alert('Password should be at least 6 characters');
+        }
+        return
+      });
+  };
 
   return (
     <KeyboardAvoidingView>
@@ -35,15 +76,11 @@ function SignUpScreen({navigation}) {
           value={password}
           onChangeText={password => setPassword(password)}
         />
-        <Button
-          mode="contained"
-          onPress={() => console.log('Signup successfully')}>
-           SignUp
+        <Button mode="contained" onPress={() => userSignup()}>
+          SignUp
         </Button>
-        <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
-          <Text style={{textAlign: 'center', fontSize: 18}}>
-            login?
-          </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={{textAlign: 'center', fontSize: 18}}>login?</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
