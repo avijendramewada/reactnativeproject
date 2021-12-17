@@ -19,6 +19,7 @@ import SignUpScreen from './src/screens/SignUpScreen';
 import CreateAdScreen from './src/screens/CreateAdScreen';
 import ItemsScreen from './src/screens/ItemsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import LoginWithPhone from './src/screens/LoginWithPhone';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -48,6 +49,11 @@ const AuthNavigaror = () => {
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Phone"
+        component={LoginWithPhone}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
