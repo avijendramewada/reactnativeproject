@@ -1,6 +1,15 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, KeyboardAvoidingView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Alert,
+} from 'react-native';
 import {TextInput, Button} from 'react-native-paper';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import ImagePicker from 'react-native-image-picker';
 
 function CreateAdScreen(props) {
   const [name, setName] = useState('');
@@ -8,6 +17,65 @@ function CreateAdScreen(props) {
   const [year, setYear] = useState('');
   const [price, setPrice] = useState('');
   const [phone, setPhone] = useState('');
+  const [image, setImage] = useState('');
+
+  const selectFile = () => {
+    var options = {
+      title: 'Select Image',
+      customButtons: [
+        {
+          name: 'customOptionKey',
+          title: 'Choose file from Custom Option',
+        },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, res => {
+      console.log('Response = ', res);
+
+      if (res.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (res.error) {
+        console.log('ImagePicker Error: ', res.error);
+      } else if (res.customButton) {
+        console.log('User tapped custom button: ', res.customButton);
+        alert(res.customButton);
+      } else {
+        let source = res;
+        setState(source);
+      }
+    });
+  };
+
+  const createPost = async () => {
+    if (!name || !descp || !year || !price || !phone) {
+      Alert.alert('please fill all field!');
+    } else {
+      try {
+        await firestore().collection('ads').add({
+          name,
+          descp,
+          year,
+          price,
+          phone,
+          image: 'https://imgd.aeplcdn.com/0x0/n/r3ljc5a_1434074.jpg',
+          uid: auth().currentUser.uid,
+        });
+      } catch (error) {
+        Alert.alert('something went wroung');
+      } finally {
+        setName('');
+        setDescp('');
+        setPrice('');
+        setYear('');
+        setPhone('');
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -51,13 +119,10 @@ function CreateAdScreen(props) {
         value={phone}
         onChangeText={phone => setPhone(phone)}
       />
-      <Button
-        icon="camera"
-        mode="contained"
-        onPress={() => console.log('Pressed')}>
+      <Button icon="camera" mode="contained" onPress={() => selectFile()}>
         Upload Image
       </Button>
-      <Button mode="contained" onPress={() => console.log('post successfully')}>
+      <Button mode="contained" onPress={() => createPost()}>
         Post
       </Button>
     </View>

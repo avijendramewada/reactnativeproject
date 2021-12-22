@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text,StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper'
 import auth from '@react-native-firebase/auth';
 const ProfileScreen = () => {
@@ -7,12 +7,29 @@ const ProfileScreen = () => {
  auth().signOut();
   }
   return (
-    <View>
-      <Text>{auth().currentUser.email}</Text>
-      <Button mode="contained" onPress={() => signOut()}>
-        SignOut
-      </Button>
+    <View style={styles.container}>
+      <Text style={styles.text}>{auth().currentUser.email}</Text>
+      <View style={styles.signoutbtn}>
+        <Button mode="contained" onPress={() => signOut()}>
+          SignOut
+        </Button>
+      </View>
     </View>
   );
-};
+}
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+  },
+  text:{
+    fontSize:20,
+    fontWeight:'800'
+  },
+  signoutbtn:{
+    flex:1,
+    padding:'10%',
+    justifyContent:'flex-end',
+   // alignItems:'center'
+  }
+})
 export default ProfileScreen;

@@ -1,5 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useState} from 'react';
+import Feather from 'react-native-vector-icons/Feather';
 import {
   StyleSheet,
   View,
@@ -15,15 +16,16 @@ import auth from '@react-native-firebase/auth';
 function SignUpScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [hidePass, setHidePass] = useState(true);
 
   const userSignup = async () => {
     if (!email && !password) {
       Alert.alert('Please enter email and password');
       return;
     }
-    if(!email){
-      Alert.alert('please enter email')
-      return
+    if (!email) {
+      Alert.alert('please enter email');
+      return;
     }
     if (!password) {
       Alert.alert('please enter password');
@@ -42,10 +44,10 @@ function SignUpScreen({navigation}) {
         if (error.code === 'auth/invalid-email') {
           Alert.alert('That email address is invalid!');
         }
-          if (error.code === 'auth/weak-password') {
+        if (error.code === 'auth/weak-password') {
           Alert.alert('Password should be at least 6 characters');
         }
-        return
+        return;
       });
   };
 
@@ -68,14 +70,24 @@ function SignUpScreen({navigation}) {
           value={email}
           onChangeText={email => setEmail(email)}
         />
-        <TextInput
-          label="Password"
-          style={{fontSize: 18}}
-          secureTextEntry={true}
-          mode="outlined"
-          value={password}
-          onChangeText={password => setPassword(password)}
-        />
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <TextInput
+            label="Password"
+            style={{fontSize: 18}}
+            secureTextEntry={true}
+            mode="outlined"
+            secureTextEntry={hidePass ? true : false}
+            value={password}
+            onChangeText={password => setPassword(password)}
+          />
+          <Feather
+            style={styles.icon}
+            name={hidePass ? 'eye-off' : 'eye'}
+            size={25}
+            color="grey"
+            onPress={() => setHidePass(!hidePass)}
+          />
+        </View>
         <Button mode="contained" onPress={() => userSignup()}>
           SignUp
         </Button>
@@ -103,7 +115,18 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingHorizontal: 40,
-    height: '50%',
-    justifyContent: 'space-evenly',
+    fontSize: 20,
+    height: '40%',
+    marginTop: 10,
+  },
+  icon: {
+    zIndex: 3,
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    marginRight: '4%',
+    //textAlign:'center'
+    // marginTop: 20,
+    // alignItems: 'center',
+    //marginLeft: 200,
   },
 });

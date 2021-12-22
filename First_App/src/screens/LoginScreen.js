@@ -16,7 +16,6 @@ function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [hidePass, setHidePass] = useState(true);
-
   const [icon, setIcon] = useState('eye-off');
 
   const userLogin = async () => {

@@ -1,5 +1,6 @@
 import React, {useState,useEffect} from 'react';
 import type {Node} from 'react';
+import { LogBox } from "react-native";
 import {
   Button,
   FlatList,
@@ -27,6 +28,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Feather from 'react-native-vector-icons/Feather';
 import auth from '@react-native-firebase/auth';
 
+LogBox.ignoreLogs(['EventEmitter.removeListener']);
 
 const theme = {
   ...DefaultTheme,
