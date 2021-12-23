@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: 40,
     fontSize: 20,
-    height: '40%',
-    marginTop: 10,
+    height: '42%',
+    marginTop: '1%',
   },
   icon: {
     zIndex: 3,

@@ -71,7 +71,7 @@ function LoginScreen({navigation}) {
           onChangeText={email => setEmail(email)}
         />
 
-        <View style={{flex:1,justifyContent:'center'}}>
+        <View style={{flex: 1, justifyContent: 'center'}}>
           <TextInput
             label="Password"
             style={{fontSize: 18}}
@@ -92,16 +92,17 @@ function LoginScreen({navigation}) {
         <Button mode="contained" onPress={() => userLogin()}>
           Login
         </Button>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <Text style={{textAlign: 'center', fontSize: 18}}>
-            Don't have a account
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Phone')}>
+      
+      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+        <Text style={{textAlign: 'center', fontSize: 18}}>
+          Don't have a account
+        </Text>
+      </TouchableOpacity>
+      {/* <TouchableOpacity onPress={() => navigation.navigate('Phone')}>
           <Text style={{textAlign: 'center', fontSize: 18}}>
             Login with phone
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </KeyboardAvoidingView>
   );
@@ -124,8 +125,8 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: 40,
     fontSize: 20,
-    height: '50%',
-    justifyContent: 'space-evenly',
+    height: '47 %',
+    marginTop:'1%',
   },
   icon: {
     zIndex: 3,

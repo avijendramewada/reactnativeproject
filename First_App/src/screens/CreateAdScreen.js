@@ -9,7 +9,8 @@ import {
 import {TextInput, Button} from 'react-native-paper';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import ImagePicker from 'react-native-image-picker';
+//import ImagePicker from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 function CreateAdScreen(props) {
   const [name, setName] = useState('');
@@ -17,39 +18,35 @@ function CreateAdScreen(props) {
   const [year, setYear] = useState('');
   const [price, setPrice] = useState('');
   const [phone, setPhone] = useState('');
-  const [image, setImage] = useState('');
+  const [imageSource, setImageSource] = useState(null);
 
-  const selectFile = () => {
-    var options = {
-      title: 'Select Image',
-      customButtons: [
-        {
-          name: 'customOptionKey',
-          title: 'Choose file from Custom Option',
-        },
-      ],
+  function selectImage() {
+    let options = {
+      title: 'You can choose one image',
+      maxWidth: 256,
+      maxHeight: 256,
       storageOptions: {
         skipBackup: true,
-        path: 'images',
       },
     };
 
-    ImagePicker.showImagePicker(options, res => {
-      console.log('Response = ', res);
+    launchImageLibrary(options, response => {
+      console.log(response.uri);
 
-      if (res.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (res.error) {
-        console.log('ImagePicker Error: ', res.error);
-      } else if (res.customButton) {
-        console.log('User tapped custom button: ', res.customButton);
-        alert(res.customButton);
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+        Alert.alert('You did not select any image');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
       } else {
-        let source = res;
-        setState(source);
+        let source = response.assets[0].fileName;
+        setImageSource(source);
+        Alert.alert(imageSource);
       }
     });
-  };
+  }
 
   const createPost = async () => {
     if (!name || !descp || !year || !price || !phone) {
@@ -119,7 +116,7 @@ function CreateAdScreen(props) {
         value={phone}
         onChangeText={phone => setPhone(phone)}
       />
-      <Button icon="camera" mode="contained" onPress={() => selectFile()}>
+      <Button icon="camera" mode="contained" onPress={selectImage}>
         Upload Image
       </Button>
       <Button mode="contained" onPress={() => createPost()}>
