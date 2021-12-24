@@ -19,6 +19,8 @@ import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import 'react-native-gesture-handler';
 
 LogBox.ignoreLogs(['EventEmitter.removeListener']);
+LogBox.ignoreLogs(['Reanimated 2']);
+
 
 const theme = {
   ...DefaultTheme,
