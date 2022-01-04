@@ -5,8 +5,13 @@ import ItemsScreen from '../screens/ItemsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import CreateAdScreen from '../screens/CreateAdScreen';
 import Feather from 'react-native-vector-icons/Feather';
-import {StackNavigator,CreateAdStackNavigator,ProfileStackNavigator} from './stackNavigation';
+import {
+  StackNavigator,
+  CreateAdStackNavigator,
+  ProfileStackNavigator,
+} from './stackNavigation';
 import DrawerNavigator from './drawerNavigator';
+
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
@@ -39,7 +44,11 @@ const TabNavigator = () => {
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
       })}>
-      <Tab.Screen name="Home" component={DrawerNavigator} options={{title: ''}} />
+      <Tab.Screen
+        name="Home"
+        component={DrawerNavigator}
+        options={{title: ''}}
+      />
       <Tab.Screen
         name="Profile"
         component={ProfileStackNavigator}

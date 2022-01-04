@@ -31,8 +31,7 @@ const StackNavigator = () => {
         name="Home"
         component={ItemsScreen}
         options={{
-          headerShown: true,
-          headerLift: props => <CartIcon {...props} />,
+          headerRight: props => <CartIcon {...props} />,
         }}
       />
       <Stack.Screen
