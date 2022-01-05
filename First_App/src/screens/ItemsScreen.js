@@ -12,16 +12,28 @@ import {Avatar, Button, Card, Title, Paragraph} from 'react-native-paper';
 import firestore from '@react-native-firebase/firestore';
 import Feather from 'react-native-vector-icons/Feather';
 
-
 function ItemsScreen(props) {
   const [item, setItem] = useState([]);
   const myItem = async () => {
-    const subscriber = await firestore().collection('ads');
-    subscriber.onSnapshot(snap => {
-      const result = snap.docs.map(item => item.data());
-      setItem(result);
-      console.log('updated');
-    });
+    await firestore()
+      .collection('ads')
+      .get()
+      .then(querySnapshot => {
+        // console.log('Total users: ', querySnapshot.size);
+
+        const result = querySnapshot.docs.map(documentSnapshot => {
+          //console.log('User ID: ', documentSnapshot.data());
+          return documentSnapshot.data();
+        });
+        //console.log(result);
+        setItem(result);
+      });
+    // const subscriber = await firestore().collection('ads');
+    // subscriber.onSnapshot(snap => {
+    //   const result = snap.docs.map(item => item.data());
+    //   setItem(result);
+    //   console.log('updated');
+    // });
     //const result = subscriber.docs.map(item => item.data());
     // console.log(item);
     // setItem(result);
@@ -74,15 +86,21 @@ function ItemsScreen(props) {
   const renderItem = item => {
     return (
       <Card style={styles.card}>
-        <Card.Title title={item.name} right={(props) => <Feather {...props} icon="more-verticalss" onPress={() => Alert.alert('click')} />}
-/>
+        <Card.Title
+          title={item.name}
+          right={props => (
+            <Feather
+              {...props}
+              icon="more-verticalss"
+              onPress={() => Alert.alert('click')}
+            />
+          )}
+        />
         <Card.Content>
           <Paragraph>{item.descp}</Paragraph>
           <Paragraph>{item.year}</Paragraph>
         </Card.Content>
-        <Card.Cover
-          source={{uri: item.imageSource}}
-        />
+        <Card.Cover source={{uri: item.imageSource}} />
         <Card.Actions>
           <Button>{item.price}</Button>
           <Button onPress={() => openDial(item.phone)}>call seller</Button>

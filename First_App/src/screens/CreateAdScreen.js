@@ -92,7 +92,7 @@ function CreateAdScreen({navigation}) {
       },
     };
     let isCameraPermitted = await requestCameraPermission();
-    let isStoragePermitted = await requestExternalWritePermission();
+   // let isStoragePermitted = await requestExternalWritePermission();
     if (isCameraPermitted) {
       launchCamera(options, response => {
         console.log('Response = ', response);
